@@ -4,6 +4,15 @@ canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
 c.fillStyle = "white"
+c.globalAlpha = 0.15
+
+const colors = [
+    "#AD343E",
+    "#F2AF29",
+    "#255C99",
+    "#00E8FC",
+    "#002A22",
+]
 
 const mouse = {
     x: undefined,
@@ -16,13 +25,16 @@ canvas.addEventListener("mousemove", (e) =>{
 })
 
 const mouseCircle = () =>{
-    const radius = 50
+    const radius = 20
 
     c.save()
     c.beginPath()
     c.arc(mouse.x, mouse.y, radius, 0, Math.PI*2)
-    c.strokeStyle = "rgba(255, 0, 0, 0.1)"
-    c.stroke()
+    c.save()
+    c.globalAlpha = 1
+    c.fillStyle = "white"
+    c.fill()
+    c.restore()
     c.closePath()
     c.restore()
 
@@ -107,7 +119,7 @@ class Circle{
     x = undefined;
     y = undefined;
     radius = undefined;
-    color = "blue"
+    color = colors[Math.floor(Math.random() * circles.length)]
     velocity = {
         x: (Math.random() * 10) - 5,
         y: (Math.random() * 10) - 5,
@@ -138,13 +150,6 @@ class Circle{
             }
         }
 
-        const preVelocity = { ...this.velocity }
-        if(getDistance(this.x, this.y, mouse.x, mouse.y) < (this.radius + mouseCircle().radius)){
-            this.color = "red"
-        }else{
-            this.color = "blue"
-        }
-
         if((this.x < this.radius) || (this.x > (window.innerWidth - this.radius))){
             this.velocity.x *= -1
         }
@@ -158,7 +163,7 @@ class Circle{
 }
 
 for(let i = 0; i <= 100; i++){
-    let radius = 30/* Math.random() * 30 + 20 */
+    let radius = 30
     let x = (Math.random() * (innerWidth - radius*2)) + radius
     let y = (Math.random() * (innerHeight - radius*2)) + radius
     
